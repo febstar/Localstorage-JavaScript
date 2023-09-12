@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Form</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Contact Form</h1>
+        <form id="infoForm">
+            <label for="name">Name:</label>
+            <input type="text" id="name" required><br><br>
+
+            <label for="number">Number:</label>
+            <input type="text" id="number" required><br><br>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" required><br><br>
+
+            <label for="team">Team:</label>
+            <input type="text" id="team" required><br><br>
+
+            <label for="cohort">Cohort:</label>
+            <input type="text" id="cohort" required><br><br>
+
+            <button type="submit">Submit</button>
+        </form>
+
+        <div id="output">
+            <!-- Display saved information here -->
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const infoForm = document.getElementById("infoForm");
+            const outputDiv = document.getElementById("output");
+
+            infoForm.addEventListener("submit", function (e) {
+                e.preventDefault();
+
+                const name = document.getElementById("name").value;
+                const number = document.getElementById("number").value;
+                const email = document.getElementById("email").value;
+                const team = document.getElementById("team").value;
+                const cohort = document.getElementById("cohort").value;
+
+
+                const info = {
+                    name,
+                    number,
+                    email,
+                    team,
+                    cohort,
+                };
+
+                let savedData = JSON.parse(localStorage.getItem("infoData")) || [];
+
+                savedData.push(info);
+
+                localStorage.setItem("infoData", JSON.stringify(savedData));
+
+
+                infoForm.reset();
+
+
+                displayData(savedData);
+            });
+
+            function displayData(data) {
+                outputDiv.innerHTML = "";
+                if (data.length === 0) {
+                    outputDiv.textContent = "No information saved yet.";
+                    return;
+                }
+
+                const ul = document.createElement("ul");
+                data.forEach((info, index) => {
+                    const li = document.createElement("li");
+                    li.textContent = `Entry ${index + 1}: Name: ${info.name}, Number: ${info.number}, Email: ${info.email}, Team: ${info.team}, Cohort: ${info.cohort}`;
+                    ul.appendChild(li);
+                });
+
+                outputDiv.appendChild(ul);
+            }
+
+            const savedData = JSON.parse(localStorage.getItem("infoData")) || [];
+            displayData(savedData);
+        });
+    </script>
+</body>
+</html>
